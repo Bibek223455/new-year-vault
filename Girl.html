@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 | Our Perspective</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --rose: #fce4ec; 
+            --silk: #fffaf0;
+            --charcoal: #2d3436;
+            --soft-white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body, html { 
+            height: 100%; 
+            background: var(--silk); 
+            color: var(--charcoal);
+            font-family: 'Georgia', serif;
+            overflow: hidden; 
+        }
+
+        body::before {
+            content: "✨";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .main-container {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .btn {
+            margin-top: 30px;
+            padding: 16px 45px;
+            background: var(--charcoal);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn:hover {
+            background: var(--gold);
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        #musicToggle {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2000;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        #musicToggle.playing {
+            background: var(--gold);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #hero {
+            background: linear-gradient(rgba(255, 250, 240, 0.7), rgba(255, 250, 240, 0.7)), 
+                        url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070');
+            background-size: cover;
+        }
+        .label { letter-spacing: 5px; color: var(--gold); font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; font-weight: bold; }
+        h1 { font-size: 3.8rem; font-weight: 400; letter-spacing: 2px; color: var(--charcoal); margin-bottom: 25px; }
+        .hero-para { max-width: 600px; line-height: 2; font-style: italic; color: #555; font-size: 1.15rem; background: rgba(255,255,255,0.3); padding: 20px; border-radius: 20px; backdrop-filter: blur(5px); }
+
+        #milestones { background: var(--rose); }
+        .audit-box {
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            border: 2px solid #fff;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        .audit-box h2 { font-size: 2.2rem; letter-spacing: 5px; margin-bottom: 40px; color: var(--gold); }
+        .audit-row { width: 300px; display: flex; justify-content: space-between; margin: 20px auto; border-bottom: 1px dashed var(--gold); padding-bottom: 5px; }
+
+        #vault { background: #fff; overflow: hidden; }
+        .vault-content { z-index: 10; background: rgba(255,255,255,0.85); padding: 40px; border-radius: 25px; border: 1px solid var(--gold); backdrop-filter: blur(10px); }
+        .clock { font-size: 3.5rem; font-weight: bold; color: var(--gold); margin: 15px 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
+
+        .photo {
+            position: absolute;
+            width: 200px;
+            height: 240px;
+            background: #fff;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            /* --- FIXED IMAGE CLIPPING HERE --- */
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: content-box;
+            /* --------------------------------- */
+            transition: 0.5s ease;
+        }
+        .photo::after {
+            content: "♥";
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+        .photo:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 100; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+
+        .p1 { top: 10%; left: 8%; transform: rotate(-12deg); }
+        .p2 { top: 5%; left: 42%; transform: rotate(5deg); }
+        .p3 { top: 12%; right: 8%; transform: rotate(15deg); }
+        .p4 { bottom: 12%; left: 10%; transform: rotate(-8deg); }
+        .p5 { bottom: 5%; left: 40%; transform: rotate(-3deg); }
+        .p6 { bottom: 12%; right: 10%; transform: rotate(10deg); }
+
+        #final { background: var(--charcoal); color: #fff; }
+        .letter-wrap { max-width: 600px; padding: 40px; background: rgba(255,255,255,0.05); border-radius: 30px; border: 1px solid rgba(212, 175, 55, 0.2); }
+        .letter-wrap h2 { font-size: 2.2rem; color: var(--gold); margin-bottom: 25px; }
+        .letter-wrap p { font-family: 'Arial', sans-serif; line-height: 2; color: #efefef; margin-bottom: 20px; }
+        .signature { font-family: 'Brush Script MT', cursive; font-size: 2rem; color: var(--gold); margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="https://files.catbox.moe/l83ldz.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicToggle" onclick="toggleMusic()">🎵</div>
+
+<div class="main-container" id="scrollBox">
+
+    <section id="hero">
+        <div class="label">Our Journey // 2026</div>
+        <h1>The New Standard</h1>
+        <p class="hero-para">
+            "Friendship, in its most refined form, is a journey of shared growth and unwavering loyalty. Thank you for being the highlight of my 2025."
+        </p>
+        <button class="btn" onclick="scrollToPage(1)">Click for Magic ✨</button>
+    </section>
+
+    <section id="milestones">
+        <div class="audit-box">
+            <h2>Our Milestones</h2>
+            <div class="audit-row"><span>Laughter</span><span>Infinite</span></div>
+            <div class="audit-row"><span>Loyalty</span><span>100%</span></div>
+            <div class="audit-row"><span>Memories</span><span>Premium</span></div>
+            <div class="audit-footer">Audit result: Best Friend of the Year 🏆</div>
+        </div>
+        <button class="btn" onclick="scrollToPage(2)">Enter the Vault 📂</button>
+    </section>
+
+    <section id="vault">
+        <div class="photo p1" style="background-image: url('https://i.ibb.co/fzSQh7kg/WhatsApp-Image-2025-12-31-at-5-54-43-PM-1.jpg')"></div>
+        <div class="photo p2" style="background-image: url('https://i.ibb.co/HT5ZGLVK/WhatsApp-Image-2025-12-31-at-5-54-43-PM-2.jpg')"></div>
+        <div class="photo p3" style="background-image: url('https://i.ibb.co/rRspHbmt/WhatsApp-Image-2025-12-31-at-5-54-43-PM.jpg')"></div>
+        <div class="photo p4" style="background-image: url('https://i.ibb.co/ZzxNr4bJ/WhatsApp-Image-2025-12-31-at-5-54-42-PM-1.jpg')"></div>
+        <div class="photo p5" style="background-image: url('https://i.ibb.co/Ndcvc2cQ/WhatsApp-Image-2025-12-31-at-5-54-44-PM-1.jpg')"></div>
+        <div class="photo p6" style="background-image: url('https://i.ibb.co/M51J1dj9/WhatsApp-Image-2025-12-31-at-5-54-44-PM.jpg')"></div>
+
+        <div class="vault-content">
+            <div class="label">Waiting for 2026 with you...</div>
+            <div class="clock" id="timer">00 : 00 : 00</div>
+            <button class="btn" onclick="scrollToPage(3)">The Final Word 💌</button>
+        </div>
+    </section>
+
+    <section id="final">
+        <div class="letter-wrap">
+            <h2>A Final Statement.</h2>
+            <p>"I wanted to design this to show you how much you mean to me. You are the balance and wisdom in my life."</p>
+            <p>"As we enter 2026, my commitment to this friendship remains absolute. Thank you for everything."</p>
+            <p><h2> HAPPY NEW YEAR!!</h2></p>
+            <div class="signature">Sincerely, Your Best Friend</div>
+            <div class="signature">Bibek Gupta</div>
+            <br>
+            <button class="btn" style="background: transparent; border: 1px solid var(--gold);" onclick="scrollToPage(0)">Restart the Magic</button>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggle');
+
+    function toggleMusic() {
+        if (music.paused) {
+            music.play().catch(e => console.log("Music play blocked until user clicks"));
+            musicBtn.classList.add('playing');
+            musicBtn.innerText = "⏸️";
+        } else {
+            music.pause();
+            musicBtn.classList.remove('playing');
+            musicBtn.innerText = "🎵";
+        }
+    }
+
+    function scrollToPage(index) {
+        // Trigger music automatically on first scroll/click
+        if (index > 0 && music.paused) {
+            toggleMusic();
+        }
+        const container = document.getElementById('scrollBox');
+        const sectionHeight = window.innerHeight;
+        container.scrollTo({ top: sectionHeight * index, behavior: 'smooth' });
+    }
+
+    const targetDate = new Date("Jan 1, 2026 00:00:00").getTime();
+    
+    function updateTimer() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+        if (diff < 0) {
+            document.getElementById('timer').innerText = "Happy New Year! ❤️";
+            return;
+        }
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('timer').innerText = `${String(h).padStart(2, '0')} : ${String(m).padStart(2, '0')} : ${String(s).padStart(2, '0')}`;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+</script>
+
+</body>
+</html>
